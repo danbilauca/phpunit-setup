@@ -182,6 +182,7 @@ if ( ! $driver->query( "CREATE DATABASE `{$db}`" ) ) {
 	exit( "\nError: could not create test database " . $db );
 }
 echo 'Done.';
+exec( "git clone git@github.com:Yoast/PHPUnit-Polyfills.git {$default_tmp_dir}/../vendor/yoast/phpunit-polyfills" );
 echo "\n\nYour phpunit setup has been completed with success!\n\n";
 
 fclose( $handle );

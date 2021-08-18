@@ -97,6 +97,17 @@ echo "\nType in the WordPress version to install: (Default: {$default_wp_version
 $line       = trim( fgets( $handle ) );
 $wp_version = $line ? $line : $default_wp_version;
 
+//fetch the last version of WP
+if ( 'latest' === $wp_version ) {
+	$data = file_get_contents( 'http://api.wordpress.org/core/version-check/1.7/' );
+	if ( ! empty( $data ) ) {
+		$data = json_decode( $data, true );
+	}
+	if ( ! empty( $data['offers'][0]['current'] ) ) {
+		$wp_version = $data['offers'][0]['current'];
+	}
+}
+
 //read db username from keyboard
 $default_db_user = 'root';
 echo "\nType int the MySQL username: (Default: {$default_db_user}): ";
@@ -182,7 +193,6 @@ if ( ! $driver->query( "CREATE DATABASE `{$db}`" ) ) {
 	exit( "\nError: could not create test database " . $db );
 }
 echo 'Done.';
-exec( "git clone git@github.com:Yoast/PHPUnit-Polyfills.git {$default_tmp_dir}/../vendor/yoast/phpunit-polyfills" );
 echo "\n\nYour phpunit setup has been completed with success!\n\n";
 
 fclose( $handle );

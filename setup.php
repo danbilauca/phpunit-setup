@@ -192,6 +192,18 @@ $driver->query( "DROP DATABASE IF EXISTS `{$db}`" );
 if ( ! $driver->query( "CREATE DATABASE `{$db}`" ) ) {
 	exit( "\nError: could not create test database " . $db );
 }
+echo "Done.";
+
+echo "\nInstalling dependencies...";
+
+chdir( $wp_tests_dir );
+if ( ! mkdir( './libs' ) && ! is_dir( './libs' ) ) {
+	throw new \RuntimeException( sprintf( 'Directory "%s" was not created', './libs' ) );
+}
+download( "https://codeload.github.com/Yoast/PHPUnit-Polyfills/zip/refs/tags/1.0.2", $wp_tests_dir . "/libs/yoast-polyfills.zip" );
+unzip( $wp_tests_dir . "/libs/yoast-polyfills.zip" );
+unlink( $wp_tests_dir . "/libs/yoast-polyfills.zip" );
+
 echo 'Done.';
 echo "\n\nYour phpunit setup has been completed with success!\n\n";
 
